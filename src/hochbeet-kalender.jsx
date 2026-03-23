@@ -18,20 +18,39 @@ export default function App() {
   const currentMonth = today.getMonth();
   const [selected, setSelected] = useState(currentMonth);
   const [selectedLocs, setSelectedLocs] = useState(sublocations);
+  const [checked, setChecked] = useState(() => {
+    try {
+      return new Set(JSON.parse(localStorage.getItem("garden-checked") || "[]"));
+    } catch {
+      return new Set();
+    }
+  });
   const data = calendar[selected];
 
   function toggleLoc(loc) {
     setSelectedLocs(prev => {
-      // When all are selected, clicking one switches to showing only that one
       if (prev.length === sublocations.length) return [loc];
       if (prev.includes(loc)) {
         const next = prev.filter(l => l !== loc);
-        // Deselecting the last one resets to all
         return next.length === 0 ? sublocations : next;
       }
       return [...prev, loc];
     });
   }
+
+  function toggleChecked(key) {
+    setChecked(prev => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      localStorage.setItem("garden-checked", JSON.stringify([...next]));
+      return next;
+    });
+  }
+
+  // Stable key: month index + category + item name/text + location
+  const mk = (cat, item) =>
+    `${selected}:${cat}:${item.name || item.text}:${item.wo || ""}`;
 
   const filterByLoc = (items) => items.filter(item => !item.wo || selectedLocs.includes(item.wo));
 
@@ -41,6 +60,25 @@ export default function App() {
     einpflanzen: filterByLoc(data.einpflanzen),
     ernten: filterByLoc(data.ernten),
   };
+
+  function PlantRow({ item, cat, bg }) {
+    const key = mk(cat, item);
+    const done = checked.has(key);
+    return (
+      <div className={`flex items-center gap-2.5 ${bg} rounded-lg px-3 py-2 ${done ? "opacity-50" : ""}`}>
+        <div className="flex-1 min-w-0">
+          <span className={`font-semibold text-sm text-gray-800 ${done ? "line-through" : ""}`}>{item.name}</span>
+          {item.tipp && <div className="text-xs text-gray-500 mt-0.5">{item.tipp}</div>}
+        </div>
+        <input
+          type="checkbox"
+          checked={done}
+          onChange={() => toggleChecked(key)}
+          className="shrink-0 accent-green-600 cursor-pointer"
+        />
+      </div>
+    );
+  }
 
   return (
     <div style={{ fontFamily: "'Georgia', serif", background: "#f5f0e8", minHeight: "100vh" }}>
@@ -108,12 +146,21 @@ export default function App() {
             <div className="bg-stone-50 border-b border-stone-200 px-5 py-3">
               <div className="text-xs font-bold uppercase tracking-widest text-stone-400 mb-2">Aufgaben</div>
               <ul className="space-y-1">
-                {filterByLoc(data.aufgaben).map((item, i) => (
-                  <li key={i} className="text-sm text-gray-700 flex items-start gap-2">
-                    <span className="text-stone-400 mt-0.5 shrink-0">–</span>
-                    {item.text}
-                  </li>
-                ))}
+                {filterByLoc(data.aufgaben).map((item, i) => {
+                  const key = mk("aufgaben", item);
+                  const done = checked.has(key);
+                  return (
+                    <li key={i} className={`text-sm text-gray-700 flex items-center gap-2.5 ${done ? "opacity-50" : ""}`}>
+                      <span className={`flex-1 ${done ? "line-through" : ""}`}>{item.text}</span>
+                      <input
+                        type="checkbox"
+                        checked={done}
+                        onChange={() => toggleChecked(key)}
+                        className="shrink-0 accent-green-600 cursor-pointer"
+                      />
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           )}
@@ -130,12 +177,7 @@ export default function App() {
               color="text-orange-600"
               items={filtered.vorziehen}
               renderItem={(item, i) => (
-                <div key={i} className="flex items-start gap-2 bg-orange-50 rounded-lg px-3 py-2">
-                  <div className="flex-1 min-w-0">
-                    <span className="font-semibold text-sm text-gray-800">{item.name}</span>
-                    {item.tipp && <div className="text-xs text-gray-500 mt-0.5">{item.tipp}</div>}
-                  </div>
-                </div>
+                <PlantRow key={i} item={item} cat="vorziehen" bg="bg-orange-50" />
               )}
             />
 
@@ -144,12 +186,7 @@ export default function App() {
               color="text-lime-700"
               items={filtered.aussaeen}
               renderItem={(item, i) => (
-                <div key={i} className="flex items-start gap-2 bg-lime-50 rounded-lg px-3 py-2">
-                  <div className="flex-1 min-w-0">
-                    <span className="font-semibold text-sm text-gray-800">{item.name}</span>
-                    {item.tipp && <div className="text-xs text-gray-500 mt-0.5">{item.tipp}</div>}
-                  </div>
-                </div>
+                <PlantRow key={i} item={item} cat="aussaeen" bg="bg-lime-50" />
               )}
             />
 
@@ -158,12 +195,7 @@ export default function App() {
               color="text-green-700"
               items={filtered.einpflanzen}
               renderItem={(item, i) => (
-                <div key={i} className="flex items-start gap-2 bg-green-50 rounded-lg px-3 py-2">
-                  <div className="flex-1 min-w-0">
-                    <span className="font-semibold text-sm text-gray-800">{item.name}</span>
-                    {item.tipp && <div className="text-xs text-gray-500 mt-0.5">{item.tipp}</div>}
-                  </div>
-                </div>
+                <PlantRow key={i} item={item} cat="einpflanzen" bg="bg-green-50" />
               )}
             />
 
@@ -172,12 +204,7 @@ export default function App() {
               color="text-red-600"
               items={filtered.ernten}
               renderItem={(item, i) => (
-                <div key={i} className="flex items-start gap-2 bg-red-50 rounded-lg px-3 py-2">
-                  <div className="flex-1 min-w-0">
-                    <span className="font-semibold text-sm text-gray-800">{item.name}</span>
-                    {item.tipp && <div className="text-xs text-gray-500 mt-0.5">{item.tipp}</div>}
-                  </div>
-                </div>
+                <PlantRow key={i} item={item} cat="ernten" bg="bg-red-50" />
               )}
             />
 
