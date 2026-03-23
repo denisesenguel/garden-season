@@ -37,7 +37,8 @@ export default function App() {
 
   const filtered = {
     vorziehen: filterByLoc(data.vorziehen),
-    pflanzen: filterByLoc(data.pflanzen),
+    aussaeen: filterByLoc(data.aussaeen),
+    einpflanzen: filterByLoc(data.einpflanzen),
     ernten: filterByLoc(data.ernten),
   };
 
@@ -46,10 +47,8 @@ export default function App() {
       {/* Header */}
       <div style={{ background: "linear-gradient(135deg, #2d5a27 0%, #4a7c3f 50%, #6b9e5e 100%)" }} className="px-4 pt-8 pb-6 text-white">
         <div className="max-w-2xl mx-auto">
-          <div className="text-xs uppercase tracking-widest opacity-70 mb-1">Dein persönlicher</div>
           <h1 style={{ fontFamily: "'Georgia', serif", letterSpacing: "-0.5px" }} className="text-3xl font-bold mb-4">🌿 Gartenkalender 2026</h1>
 
-          <div className="text-xs uppercase tracking-widest opacity-70 mb-2">Bereich</div>
           <div className="flex flex-wrap gap-2">
             {sublocations.map(loc => {
               const isActive = selectedLocs.includes(loc);
@@ -98,20 +97,26 @@ export default function App() {
         {/* Card */}
         <div className="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden mb-8">
           {/* Card Header */}
-          <div style={{ background: "linear-gradient(135deg, #4a7c3f, #7ab367)" }} className="px-5 py-4 text-white flex items-center justify-between">
-            <div>
-              <div className="text-sm opacity-75">Monat</div>
-              <div style={{ fontFamily: "'Georgia', serif" }} className="text-2xl font-bold">
-                {data.icon} {data.month}
-              </div>
+          <div style={{ background: "linear-gradient(135deg, #4a7c3f, #7ab367)" }} className="px-5 py-4 text-white">
+            <div style={{ fontFamily: "'Georgia', serif" }} className="text-2xl font-bold">
+              {data.icon} {data.month}
             </div>
-            {data.beet && (
-              <div className="text-right text-xs opacity-90 max-w-[160px] leading-relaxed">
-                <div className="font-semibold mb-0.5">📋 Garten-Status</div>
-                {data.beet}
-              </div>
-            )}
           </div>
+
+          {/* Aufgaben */}
+          {filterByLoc(data.aufgaben).length > 0 && (
+            <div className="bg-stone-50 border-b border-stone-200 px-5 py-3">
+              <div className="text-xs font-bold uppercase tracking-widest text-stone-400 mb-2">Aufgaben</div>
+              <ul className="space-y-1">
+                {filterByLoc(data.aufgaben).map((item, i) => (
+                  <li key={i} className="text-sm text-gray-700 flex items-start gap-2">
+                    <span className="text-stone-400 mt-0.5 shrink-0">–</span>
+                    {item.text}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           {/* Tipp */}
           <div className="bg-amber-50 border-b border-amber-100 px-5 py-3 text-sm text-amber-900">
@@ -135,9 +140,23 @@ export default function App() {
             />
 
             <Section
-              title="🌿 Einpflanzen / Aussäen"
+              title="🌱 Aussäen"
+              color="text-lime-700"
+              items={filtered.aussaeen}
+              renderItem={(item, i) => (
+                <div key={i} className="flex items-start gap-2 bg-lime-50 rounded-lg px-3 py-2">
+                  <div className="flex-1 min-w-0">
+                    <span className="font-semibold text-sm text-gray-800">{item.name}</span>
+                    {item.tipp && <div className="text-xs text-gray-500 mt-0.5">{item.tipp}</div>}
+                  </div>
+                </div>
+              )}
+            />
+
+            <Section
+              title="🌿 Einpflanzen"
               color="text-green-700"
-              items={filtered.pflanzen}
+              items={filtered.einpflanzen}
               renderItem={(item, i) => (
                 <div key={i} className="flex items-start gap-2 bg-green-50 rounded-lg px-3 py-2">
                   <div className="flex-1 min-w-0">
@@ -162,7 +181,7 @@ export default function App() {
               )}
             />
 
-            {filtered.vorziehen.length === 0 && filtered.pflanzen.length === 0 && filtered.ernten.length === 0 && (
+            {filterByLoc(data.aufgaben).length === 0 && filtered.vorziehen.length === 0 && filtered.aussaeen.length === 0 && filtered.einpflanzen.length === 0 && filtered.ernten.length === 0 && (
               <div className="text-center py-8 text-gray-400 text-sm">
                 🛋️ Ruhemonat – Zeit für Planung & Bestellung!
               </div>

@@ -16,11 +16,13 @@ export const calendar = [
   {
     month: "Januar",
     icon: "❄️",
+    aufgaben: [],
     vorziehen: [
       { name: "Paprika", wo: "Hochbeet überdacht", tipp: "Braucht Wärme (20–25°C) zum Keimen, lange Anzuchtzeit!" },
       { name: "Kohlrabi (1. Satz)", wo: "Hochbeet überdacht", tipp: "Frühe Sorte, z.B. 'Azur Star'" },
     ],
-    pflanzen: [],
+    aussaeen: [],
+    einpflanzen: [],
     ernten: [
       { name: "Feldsalat", wo: "Hochbeet", tipp: "Falls im Herbst gesät" },
     ],
@@ -30,12 +32,14 @@ export const calendar = [
   {
     month: "Februar",
     icon: "🌱",
+    aufgaben: [],
     vorziehen: [
       { name: "Paprika (nachholen)", wo: "Hochbeet überdacht", tipp: "Spätestens jetzt ansetzen" },
       { name: "Kohlrabi (2. Satz)", wo: "Hochbeet", tipp: "Für gestaffelte Ernte" },
       { name: "Salat (früh)", wo: "Hochbeet überdacht", tipp: "Kopfsalat oder Schnittsalat" },
     ],
-    pflanzen: [],
+    aussaeen: [],
+    einpflanzen: [],
     ernten: [
       { name: "Feldsalat", wo: "Hochbeet", tipp: "Letzter Ernteansatz vom Herbst" },
     ],
@@ -45,6 +49,11 @@ export const calendar = [
   {
     month: "März",
     icon: "🌿",
+    aufgaben: [
+      { text: "Salbei zurückschneiden (totes Holz raus)", wo: "Kräuterspirale" },
+      { text: "Lavendel leicht formen", wo: "Kräuterspirale" },
+      { text: "Oregano-Steckling beim Nachbarn anfragen (für April)", wo: "Kräuterspirale" },
+    ],
     vorziehen: [
       { name: "Tomaten", wo: "Hochbeet überdacht", tipp: "Ab Mitte März; mind. 8 Wochen vor Auspflanzen" },
       { name: "Gurken", wo: "Hochbeet überdacht", tipp: "Erst Ende März, wachsen schnell!" },
@@ -52,9 +61,15 @@ export const calendar = [
       { name: "Kürbis", wo: "Freiland Beet", tipp: "Ende März; für Freiland" },
       { name: "Salat", wo: "Hochbeet", tipp: "2. Satz für Hochbeet" },
       { name: "Kohlrabi (3. Satz)", wo: "Hochbeet", tipp: "Für späte Ernte" },
+      { name: "Basilikum", wo: "Kräuterspirale", tipp: "Ab Mitte März; oder Ende April als Setzling kaufen" },
+      { name: "Petersilie", wo: "Kräuterspirale", tipp: "Keimt langsam, 3–4 Wochen einplanen" },
+      { name: "Bohnenkraut", wo: "Kräuterspirale", tipp: "Einjährig, wächst schnell" },
     ],
-    pflanzen: [
-      { name: "Radieschen", wo: "Hochbeet überdacht", tipp: "Direktsaat möglich, mag Kühle" },
+    aussaeen: [
+      { name: "Radieschen", wo: "Hochbeet überdacht", tipp: "Direktsaat, mag Kühle" },
+      { name: "Frauenmantel", wo: "Kräuterspirale", tipp: "Verträgt Kälte, kann jetzt schon draußen gesät werden. Alternativ: Setzling kaufen." },
+    ],
+    einpflanzen: [
       { name: "Salat (Jungpflanzen)", wo: "Hochbeet überdacht", tipp: "Vorgezogene Pflanzen aus Februar" },
     ],
     ernten: [],
@@ -64,15 +79,31 @@ export const calendar = [
   {
     month: "April",
     icon: "🌸",
+    aufgaben: [
+      { text: "Zitronenverbene als Setzling kaufen – erst ab Mai raus", wo: "Kräuterspirale" },
+      { text: "Vorgezogene Setzlinge abhärten: tagsüber raus, nachts rein" },
+    ],
     vorziehen: [
       { name: "Kürbis (nochmals)", wo: "Freiland Beet", tipp: "Falls März-Satz nicht geklappt hat" },
     ],
-    pflanzen: [
-      { name: "Kohlrabi Jungpflanzen", wo: "Hochbeet überdacht", tipp: "Aus Jan/Feb-Anzucht" },
-      { name: "Salat (Folgesatz)", wo: "Hochbeet", tipp: "Ab Mitte April, wenn kein Frost mehr erwartet" },
+    aussaeen: [
       { name: "Radieschen", wo: "Hochbeet", tipp: "Direktsaat ab Mitte April" },
       { name: "Erbsen", wo: "Hochbeet", tipp: "Direktsaat – gut für Anfänger!" },
       { name: "Möhren", wo: "Hochbeet", tipp: "Direktsaat, mag lockere Erde" },
+      { name: "Salat (Folgesatz)", wo: "Hochbeet", tipp: "Ab Mitte April, wenn kein Frost mehr erwartet" },
+      { name: "Schnittlauch", wo: "Kräuterspirale", tipp: "Direktsaat ab Mitte April" },
+      { name: "Kapuzinerkresse", wo: "Kräuterspirale", tipp: "Direkt draußen aussäen, Ende April" },
+      { name: "Pimpinelle", wo: "Kräuterspirale", tipp: "Wintergrün und ausdauernd, mag magere, durchlässige Böden" },
+    ],
+    einpflanzen: [
+      { name: "Kohlrabi Jungpflanzen", wo: "Hochbeet überdacht", tipp: "Aus Jan/Feb-Anzucht" },
+      { name: "Estragon", wo: "Kräuterspirale", tipp: "Unbedingt als Setzling kaufen – Samen keimen schlecht" },
+      { name: "Ysop", wo: "Kräuterspirale", tipp: "Mehrjährig, blüht Juli–September und zieht Bienen an" },
+      { name: "Brunnenkresse", wo: "Kräuterspirale", tipp: "Setzling oder direkt in feuchten Bereich säen" },
+      { name: "Oregano (Steckling)", wo: "Kräuterspirale", tipp: "Vom Nachbarn holen, sobald er austreibt" },
+      { name: "Rosmarin", wo: "Kräuterspirale", tipp: "Aus dem Fensterkasten – Ende April raus" },
+      { name: "Thymian", wo: "Kräuterspirale", tipp: "Aus dem Fensterkasten – Ende April raus" },
+      { name: "Beifuß", wo: "Kräuterspirale", tipp: "Mehrjährig, bevorzugt trockene Standorte in der oberen Zone" },
     ],
     ernten: [
       { name: "Radieschen (März-Satz)", wo: "Hochbeet überdacht", tipp: "Ca. 3–4 Wochen nach Aussaat" },
@@ -84,14 +115,22 @@ export const calendar = [
   {
     month: "Mai",
     icon: "☀️",
+    aufgaben: [
+      { text: "Alle restlichen Setzlinge nach den Eisheiligen (ab 16. Mai) einpflanzen" },
+    ],
     vorziehen: [],
-    pflanzen: [
+    aussaeen: [
+      { name: "Salat (3. Satz)", wo: "Hochbeet", tipp: "Gestaffelt alle 3 Wochen säen" },
+      { name: "Bohnenkraut", wo: "Kräuterspirale", tipp: "Direktaussaat nach den Eisheiligen, falls nicht vorgezogen" },
+    ],
+    einpflanzen: [
       { name: "Tomaten", wo: "Hochbeet überdacht", tipp: "Ab Mitte Mai nach den Eisheiligen (11.–15. Mai)!" },
       { name: "Paprika", wo: "Hochbeet überdacht", tipp: "Wärmeliebend – nach Eisheiligen" },
       { name: "Gurken", wo: "Hochbeet überdacht", tipp: "Ideal unter dem Dach" },
       { name: "Zucchini", wo: "Freiland Beet", tipp: "Braucht viel Platz!" },
       { name: "Kürbis", wo: "Freiland Beet", tipp: "Sehr platzintensiv, ab Mitte Mai" },
-      { name: "Salat (3. Satz)", wo: "Hochbeet", tipp: "Gestaffelt alle 3 Wochen säen" },
+      { name: "Basilikum", wo: "Topf", tipp: "Nach den Eisheiligen (ab 16. Mai) endgültig raus" },
+      { name: "Zitronenverbene", wo: "Kräuterspirale", tipp: "Nach den Eisheiligen (ab 16. Mai) raus" },
     ],
     ernten: [
       { name: "Radieschen", wo: "Hochbeet", tipp: "Laufende Ernte" },
@@ -105,16 +144,18 @@ export const calendar = [
   {
     month: "Juni",
     icon: "🌞",
+    aufgaben: [],
     vorziehen: [
       { name: "Salat (Herbstsatz)", wo: "Hochbeet", tipp: "Hitzeresistente Sorte wählen" },
       { name: "Kohlrabi (Herbstsatz)", wo: "Hochbeet", tipp: "Für Herbsternte" },
     ],
-    pflanzen: [
+    aussaeen: [
       { name: "Salat (Folge)", wo: "Hochbeet", tipp: "Immer staffeln!" },
       { name: "Radieschen (Folge)", wo: "Hochbeet", tipp: "Bis Ende Juni noch möglich" },
       { name: "Buschbohnen", wo: "Hochbeet", tipp: "Direktsaat, einfach & ertragreich" },
       { name: "Rote Bete", wo: "Hochbeet", tipp: "Direktsaat bis Ende Juni" },
     ],
+    einpflanzen: [],
     ernten: [
       { name: "Radieschen", wo: "Hochbeet", tipp: "Laufend" },
       { name: "Salat", wo: "Hochbeet", tipp: "Laufend" },
@@ -128,14 +169,17 @@ export const calendar = [
   {
     month: "Juli",
     icon: "🍅",
+    aufgaben: [],
     vorziehen: [
       { name: "Salat (Herbst)", wo: "Hochbeet", tipp: "Für September-Pflanzung" },
       { name: "Pak Choi / Asiasalat", wo: "Hochbeet überdacht", tipp: "Tolles Anfänger-Gemüse für Herbst" },
     ],
-    pflanzen: [
-      { name: "Kohlrabi (Herbst)", wo: "Hochbeet", tipp: "Nach Frühernte-Lücken nachpflanzen" },
+    aussaeen: [
       { name: "Spinat", wo: "Hochbeet", tipp: "Direktsaat für Herbst" },
       { name: "Feldsalat", wo: "Hochbeet", tipp: "Ab Ende Juli für Winterernte" },
+    ],
+    einpflanzen: [
+      { name: "Kohlrabi (Herbst)", wo: "Hochbeet", tipp: "Nach Frühernte-Lücken nachpflanzen" },
     ],
     ernten: [
       { name: "🍅 Erste Tomaten!", wo: "Hochbeet überdacht", tipp: "Cherry-Tomaten zuerst reif" },
@@ -152,12 +196,15 @@ export const calendar = [
   {
     month: "August",
     icon: "🥒",
+    aufgaben: [],
     vorziehen: [],
-    pflanzen: [
-      { name: "Salat (Herbst)", wo: "Hochbeet", tipp: "Letzte Chance für Herbsternte" },
+    aussaeen: [
       { name: "Feldsalat", wo: "Hochbeet", tipp: "Direktsaat für Winter" },
       { name: "Spinat", wo: "Hochbeet", tipp: "Herbst-/Winterernte" },
       { name: "Radieschen (Herbst)", wo: "Hochbeet", tipp: "Noch eine schnelle Runde!" },
+    ],
+    einpflanzen: [
+      { name: "Salat (Herbst)", wo: "Hochbeet", tipp: "Letzte Chance für Herbsternte" },
     ],
     ernten: [
       { name: "Tomaten", wo: "Hochbeet überdacht", tipp: "Haupternte – Überschuss einkochen!" },
@@ -175,11 +222,14 @@ export const calendar = [
   {
     month: "September",
     icon: "🍂",
+    aufgaben: [],
     vorziehen: [],
-    pflanzen: [
+    aussaeen: [
       { name: "Feldsalat (letzte Chance)", wo: "Hochbeet", tipp: "Bis Mitte September noch säen" },
       { name: "Winterportulak", wo: "Hochbeet überdacht", tipp: "Tolles kältehartes Wintergemüse" },
-      { name: "Asiasalate", wo: "Hochbeet überdacht", tipp: "Mizuna, Pak Choi – sehr einfach!" },
+    ],
+    einpflanzen: [
+      { name: "Asiasalate", wo: "Hochbeet überdacht", tipp: "Mizuna, Pak Choi – aus Juli-Anzucht" },
     ],
     ernten: [
       { name: "Tomaten", wo: "Hochbeet überdacht", tipp: "Letzte Ernte, grüne Tomaten für Chutney" },
@@ -197,8 +247,10 @@ export const calendar = [
   {
     month: "Oktober",
     icon: "🎃",
+    aufgaben: [],
     vorziehen: [],
-    pflanzen: [
+    aussaeen: [],
+    einpflanzen: [
       { name: "Knoblauch", wo: "Hochbeet überdacht", tipp: "Jetzt stecken für nächstes Jahr!" },
       { name: "Knoblauch", wo: "Hochbeet", tipp: "Jetzt stecken für nächstes Jahr!" },
       { name: "Zwiebeln (Steckzwiebeln)", wo: "Hochbeet", tipp: "Herbststeckung für Frühjahrsernte" },
@@ -216,8 +268,10 @@ export const calendar = [
   {
     month: "November",
     icon: "🌧️",
+    aufgaben: [],
     vorziehen: [],
-    pflanzen: [],
+    aussaeen: [],
+    einpflanzen: [],
     ernten: [
       { name: "Feldsalat", wo: "Hochbeet", tipp: "Verträgt leichten Frost" },
       { name: "Winterportulak", wo: "Hochbeet überdacht", tipp: "Im überdachten Beet ernten" },
@@ -229,8 +283,10 @@ export const calendar = [
   {
     month: "Dezember",
     icon: "🎄",
+    aufgaben: [],
     vorziehen: [],
-    pflanzen: [],
+    aussaeen: [],
+    einpflanzen: [],
     ernten: [
       { name: "Feldsalat", wo: "Hochbeet", tipp: "Wenn kein extremer Frost" },
       { name: "Winterportulak", wo: "Hochbeet überdacht", tipp: "Im überdachten Beet" },
