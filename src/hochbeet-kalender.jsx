@@ -72,7 +72,7 @@ export default function App() {
       </div>
 
       {/* Month tabs */}
-      <div className="max-w-2xl mx-auto px-4 pt-4">
+      <div className="max-w-2xl mx-auto pt-4">
         <div className="flex flex-wrap gap-1.5 mb-5">
           {months.map((m, i) => {
             const isActive = i === selected;
