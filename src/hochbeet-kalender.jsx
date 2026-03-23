@@ -164,30 +164,6 @@ export default function App() {
           </div>
         </div>
 
-        {/* Jahresübersicht kompakt */}
-        <div className="bg-white rounded-2xl shadow-sm border border-stone-200 p-5 mb-8">
-          <h2 style={{ fontFamily: "'Georgia', serif" }} className="text-lg font-bold text-green-800 mb-3">📅 Jahresübersicht auf einen Blick</h2>
-          <div className="grid grid-cols-2 gap-2 text-xs">
-            {calendar.map((m, i) => (
-              <button
-                key={i}
-                onClick={() => setSelected(i)}
-                className={`text-left rounded-lg p-2.5 border transition-all hover:shadow-sm ${
-                  i === selected ? "border-green-500 bg-green-50" : "border-gray-100 bg-stone-50 hover:border-green-300"
-                }`}
-              >
-                <div className="font-semibold text-gray-700 mb-1">{m.icon} {m.month}</div>
-                <div className="space-y-0.5 text-gray-500">
-                  {m.vorziehen.length > 0 && <div className="text-orange-600">🌡️ {m.vorziehen.map(v => v.name).join(", ")}</div>}
-                  {m.pflanzen.length > 0 && <div className="text-green-700">🌿 {m.pflanzen.map(v => v.name).join(", ")}</div>}
-                  {m.ernten.length > 0 && <div className="text-red-600">🧺 {m.ernten.map(v => v.name).join(", ")}</div>}
-                  {m.vorziehen.length === 0 && m.pflanzen.length === 0 && m.ernten.length === 0 && <div className="italic">Ruhephase</div>}
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-
         {/* Legende */}
         <div className="bg-white rounded-2xl shadow-sm border border-stone-200 p-5 mb-8">
           <h2 style={{ fontFamily: "'Georgia', serif" }} className="text-base font-bold text-green-800 mb-3">🗺️ Legende</h2>
