@@ -1,11 +1,23 @@
 import { useState } from "react";
 import { months, calendar, sublocations } from "./hochbeet-data.js";
 
-function Section({ title, color, items, renderItem }) {
+const C = {
+  green:  "#49a078",
+  blue:   "#5b90e7",
+  red:    "#e36d52",
+  greenBg: "rgba(73,160,120,0.12)",
+  blueBg:  "rgba(91,144,231,0.12)",
+  redBg:   "rgba(227,109,82,0.12)",
+};
+
+const font = "'DM Sans', sans-serif";
+const maxW = { maxWidth: "44.5rem" };
+
+function Section({ title, titleColor, items, rowBg, renderItem }) {
   if (!items || items.length === 0) return null;
   return (
     <div className="mb-3">
-      <div className={`text-xs font-bold uppercase tracking-widest mb-2 ${color}`}>{title}</div>
+      <div style={{ color: titleColor, fontFamily: font }} className="text-xs uppercase tracking-widest italic mb-2">{title}</div>
       <div className="space-y-1.5">
         {items.map((item, i) => renderItem(item, i))}
       </div>
@@ -48,7 +60,6 @@ export default function App() {
     });
   }
 
-  // Stable key: month index + category + item name/text + location
   const mk = (cat, item) =>
     `${selected}:${cat}:${item.name || item.text}:${item.wo || ""}`;
 
@@ -61,32 +72,32 @@ export default function App() {
     ernten: filterByLoc(data.ernten),
   };
 
-  function PlantRow({ item, cat, bg }) {
+  function PlantRow({ item, cat, rowBg }) {
     const key = mk(cat, item);
     const done = checked.has(key);
     return (
-      <div className={`flex items-center gap-2.5 ${bg} rounded-lg px-3 py-2 ${done ? "opacity-50" : ""}`}>
+      <div style={{ background: rowBg, fontFamily: font }} className={`flex items-center gap-2.5 rounded-lg px-3 py-2 ${done ? "opacity-50" : ""}`}>
         <div className="flex-1 min-w-0">
-          <span className={`font-semibold text-sm text-gray-800 ${done ? "line-through" : ""}`}>{item.name}</span>
-          {item.tipp && <div className="text-xs text-gray-500 mt-0.5">{item.tipp}</div>}
+          <span className={`text-sm font-medium text-gray-800 ${done ? "line-through italic" : "italic"}`}>{item.name}</span>
+          {item.tipp && <div className="text-xs text-gray-400 mt-0.5 not-italic">{item.tipp}</div>}
         </div>
         <input
           type="checkbox"
           checked={done}
           onChange={() => toggleChecked(key)}
-          className="shrink-0 accent-green-600 cursor-pointer"
+          style={{ accentColor: C.green }}
+          className="shrink-0 cursor-pointer"
         />
       </div>
     );
   }
 
   return (
-    <div style={{ fontFamily: "'Georgia', serif", background: "#f5f0e8", minHeight: "100vh" }}>
+    <div style={{ fontFamily: font, background: "#f4f7f5", minHeight: "100vh" }}>
       {/* Header */}
-      <div style={{ background: "linear-gradient(135deg, #2d5a27 0%, #4a7c3f 50%, #6b9e5e 100%)" }} className="px-4 pt-8 pb-6 text-white">
-        <div className="max-w-2xl mx-auto">
-          <h1 style={{ fontFamily: "'Georgia', serif", letterSpacing: "-0.5px" }} className="text-3xl font-bold mb-4">🌿 Gartenkalender 2026</h1>
-
+      <div style={{ background: C.green }} className="px-4 pt-8 pb-6 text-white">
+        <div style={maxW} className="mx-auto">
+          <h1 className="text-3xl font-light uppercase tracking-wide mb-4">Gartenkalender 2026</h1>
           <div className="flex flex-wrap gap-2">
             {sublocations.map(loc => {
               const isActive = selectedLocs.includes(loc);
@@ -94,11 +105,11 @@ export default function App() {
                 <button
                   key={loc}
                   onClick={() => toggleLoc(loc)}
-                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-150 ${
-                    isActive
-                      ? "bg-white text-green-800 shadow-sm scale-105"
-                      : "bg-white/15 text-white/75 border border-white/30 hover:bg-white/25"
-                  }`}
+                  style={isActive
+                    ? { background: "white", color: C.green }
+                    : { background: "rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.8)", border: "1px solid rgba(255,255,255,0.35)" }
+                  }
+                  className="px-3 py-1.5 rounded-full text-sm uppercase tracking-wide transition-all duration-150"
                 >
                   {loc}
                 </button>
@@ -109,7 +120,7 @@ export default function App() {
       </div>
 
       {/* Month tabs */}
-      <div className="max-w-2xl mx-auto pt-4">
+      <div style={maxW} className="mx-auto pt-4">
         <div className="flex flex-wrap gap-1.5 mb-5">
           {months.map((m, i) => {
             const isActive = i === selected;
@@ -118,12 +129,15 @@ export default function App() {
               <button
                 key={m}
                 onClick={() => setSelected(i)}
-                className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-150 ${
+                style={
                   isActive
-                    ? "bg-green-700 text-white shadow-md scale-105"
+                    ? { background: C.green, color: "white" }
                     : isCurrent
-                    ? "bg-green-100 text-green-800 border-2 border-green-400"
-                    : "bg-white text-gray-600 border border-gray-200 hover:border-green-300 hover:text-green-700"
+                    ? { background: "white", color: C.green, border: `2px solid ${C.green}` }
+                    : {}
+                }
+                className={`px-3 py-1.5 rounded-full text-xs uppercase tracking-wide transition-all duration-150 ${
+                  isActive ? "shadow-md" : !isCurrent ? "bg-white text-gray-500 border border-gray-200 hover:border-gray-400" : ""
                 }`}
               >
                 {m.slice(0, 3)}
@@ -135,28 +149,27 @@ export default function App() {
         {/* Card */}
         <div className="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden mb-8">
           {/* Card Header */}
-          <div style={{ background: "linear-gradient(135deg, #4a7c3f, #7ab367)" }} className="px-5 py-4 text-white">
-            <div style={{ fontFamily: "'Georgia', serif" }} className="text-2xl font-bold">
-              {data.icon} {data.month}
-            </div>
+          <div style={{ background: C.green }} className="px-5 py-4 text-white">
+            <div className="text-2xl font-light uppercase tracking-wide">{data.icon} {data.month}</div>
           </div>
 
           {/* Aufgaben */}
           {filterByLoc(data.aufgaben).length > 0 && (
             <div className="bg-stone-50 border-b border-stone-200 px-5 py-3">
-              <div className="text-xs font-bold uppercase tracking-widest text-stone-400 mb-2">Aufgaben</div>
+              <div className="text-xs uppercase tracking-widest italic text-stone-400 mb-2">Aufgaben</div>
               <ul className="space-y-1">
                 {filterByLoc(data.aufgaben).map((item, i) => {
                   const key = mk("aufgaben", item);
                   const done = checked.has(key);
                   return (
-                    <li key={i} className={`text-sm text-gray-700 flex items-center gap-2.5 ${done ? "opacity-50" : ""}`}>
+                    <li key={i} className={`text-sm text-gray-600 flex items-center gap-2.5 ${done ? "opacity-50" : ""}`}>
                       <span className={`flex-1 ${done ? "line-through" : ""}`}>{item.text}</span>
                       <input
                         type="checkbox"
                         checked={done}
                         onChange={() => toggleChecked(key)}
-                        className="shrink-0 accent-green-600 cursor-pointer"
+                        style={{ accentColor: C.green }}
+                        className="shrink-0 cursor-pointer"
                       />
                     </li>
                   );
@@ -166,58 +179,47 @@ export default function App() {
           )}
 
           {/* Tipp */}
-          <div className="bg-amber-50 border-b border-amber-100 px-5 py-3 text-sm text-amber-900">
-            💡 <span className="font-semibold">Tipp:</span> {data.tipp}
+          <div style={{ background: C.blueBg, borderBottom: `1px solid rgba(91,144,231,0.2)` }} className="px-5 py-3 text-sm text-gray-600">
+            <span style={{ color: C.blue }} className="uppercase tracking-wide text-xs italic">Tipp </span>{data.tipp}
           </div>
 
           {/* Content */}
           <div className="px-5 py-4">
             <Section
-              title="🌡️ Vorziehen (drinnen)"
-              color="text-orange-600"
+              title="🌡 Vorziehen (drinnen)"
+              titleColor={C.red}
               items={filtered.vorziehen}
-              renderItem={(item, i) => (
-                <PlantRow key={i} item={item} cat="vorziehen" bg="bg-orange-50" />
-              )}
+              renderItem={(item, i) => <PlantRow key={i} item={item} cat="vorziehen" rowBg={C.redBg} />}
             />
-
             <Section
               title="🌱 Aussäen"
-              color="text-lime-700"
+              titleColor={C.blue}
               items={filtered.aussaeen}
-              renderItem={(item, i) => (
-                <PlantRow key={i} item={item} cat="aussaeen" bg="bg-lime-50" />
-              )}
+              renderItem={(item, i) => <PlantRow key={i} item={item} cat="aussaeen" rowBg={C.blueBg} />}
             />
-
             <Section
               title="🌿 Einpflanzen"
-              color="text-green-700"
+              titleColor={C.green}
               items={filtered.einpflanzen}
-              renderItem={(item, i) => (
-                <PlantRow key={i} item={item} cat="einpflanzen" bg="bg-green-50" />
-              )}
+              renderItem={(item, i) => <PlantRow key={i} item={item} cat="einpflanzen" rowBg={C.greenBg} />}
             />
-
             <Section
               title="🧺 Ernten"
-              color="text-red-600"
+              titleColor={C.red}
               items={filtered.ernten}
-              renderItem={(item, i) => (
-                <PlantRow key={i} item={item} cat="ernten" bg="bg-red-50" />
-              )}
+              renderItem={(item, i) => <PlantRow key={i} item={item} cat="ernten" rowBg={C.redBg} />}
             />
 
             {filterByLoc(data.aufgaben).length === 0 && filtered.vorziehen.length === 0 && filtered.aussaeen.length === 0 && filtered.einpflanzen.length === 0 && filtered.ernten.length === 0 && (
-              <div className="text-center py-8 text-gray-400 text-sm">
-                🛋️ Ruhemonat – Zeit für Planung & Bestellung!
+              <div className="text-center py-8 text-gray-400 text-sm italic">
+                Ruhemonat – Zeit für Planung & Bestellung
               </div>
             )}
           </div>
         </div>
 
-        <div className="text-center text-xs text-gray-400 pb-6">
-          Hinweis: Zeiten gelten für Mitteleuropa (Zone 6–7). Bei deiner Region ggf. 1–2 Wochen anpassen.
+        <div className="text-center text-xs uppercase tracking-wide text-gray-400 pb-6">
+          Zeiten gelten für Mitteleuropa (Zone 6–7)
         </div>
       </div>
     </div>
