@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
-import { months, calendar, sublocations } from "./hochbeet-data.js";
+import { months, sublocations } from "./hochbeet-data.js";
 import { supabase } from "./supabase.js";
+import { useMergedCalendar } from "./useMergedCalendar.js";
+import { itemKey } from "./itemKey.js";
+import ChatWidget from "./ChatWidget.jsx";
 
 const C = {
   green:  "#49a078",
@@ -39,6 +42,8 @@ export default function App() {
     }
   });
 
+  const { mergedCalendar, modifications, setModifications } = useMergedCalendar();
+
   useEffect(() => {
     supabase
       .from("garden_state")
@@ -52,7 +57,39 @@ export default function App() {
         localStorage.setItem("garden-checked", JSON.stringify([...set]));
       });
   }, []);
-  const data = calendar[selected];
+
+  const data = mergedCalendar[selected];
+
+  // Flat list of existing items for the chat widget context
+  const existingItems = mergedCalendar.flatMap((month, mi) =>
+    ["vorziehen", "aussaeen", "einpflanzen", "ernten"].flatMap(cat =>
+      (month[cat] || []).map(item =>
+        `${item.name} (${months[mi]}, ${cat}${item.wo ? ", " + item.wo : ""})`
+      )
+    )
+  );
+
+  async function handleConfirm(changes) {
+    const rows = changes.map(change => ({
+      type: change.type,
+      month_index: change.month_index,
+      category: change.category,
+      name: change.name,
+      wo: change.wo || null,
+      tipp: change.tipp || null,
+      item_key: change.item_key,
+    }));
+
+    const { data: inserted } = await supabase
+      .from("plant_modifications")
+      .insert(rows)
+      .select();
+
+    if (inserted) {
+      // Optimistic update
+      setModifications(prev => [...prev, ...inserted]);
+    }
+  }
 
   function toggleLoc(loc) {
     setSelectedLocs(prev => {
@@ -82,7 +119,7 @@ export default function App() {
   }
 
   const mk = (cat, item) =>
-    `${selected}:${cat}:${item.name || item.text}:${item.wo || ""}`;
+    itemKey(selected, cat, item.name || item.text, item.wo);
 
   const filterByLoc = (items) => items.filter(item => !item.wo || selectedLocs.includes(item.wo));
 
@@ -243,6 +280,8 @@ export default function App() {
           Zeiten gelten für Mitteleuropa (Zone 6–7)
         </div>
       </div>
+
+      <ChatWidget onConfirm={handleConfirm} existingItems={existingItems} />
     </div>
   );
 }
