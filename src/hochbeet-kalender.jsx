@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { months, calendar, sublocations } from "./hochbeet-data.js";
+import { supabase } from "./supabase.js";
 
 const C = {
   green:  "#49a078",
@@ -37,6 +38,20 @@ export default function App() {
       return new Set();
     }
   });
+
+  useEffect(() => {
+    supabase
+      .from("garden_state")
+      .select("checked")
+      .eq("id", 1)
+      .single()
+      .then(({ data }) => {
+        if (!data) return;
+        const set = new Set(data.checked);
+        setChecked(set);
+        localStorage.setItem("garden-checked", JSON.stringify([...set]));
+      });
+  }, []);
   const data = calendar[selected];
 
   function toggleLoc(loc) {
@@ -55,7 +70,13 @@ export default function App() {
       const next = new Set(prev);
       if (next.has(key)) next.delete(key);
       else next.add(key);
-      localStorage.setItem("garden-checked", JSON.stringify([...next]));
+      const arr = [...next];
+      localStorage.setItem("garden-checked", JSON.stringify(arr));
+      supabase
+        .from("garden_state")
+        .update({ checked: arr })
+        .eq("id", 1)
+        .then(() => {});
       return next;
     });
   }
