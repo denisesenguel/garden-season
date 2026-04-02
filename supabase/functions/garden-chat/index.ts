@@ -1,4 +1,4 @@
-import Anthropic from "npm:@anthropic-ai/sdk@0.36.3";
+import Anthropic from "https://esm.sh/@anthropic-ai/sdk@0.36.3";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
